@@ -1,3 +1,6 @@
+import numpy as np
+
+
 class PreferenceParams():
     """
     A class to preprocess the Preference Parameters.
