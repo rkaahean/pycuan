@@ -61,7 +61,7 @@ class UtilityCompute():
         """
         Get preference parameters for a single attribute.
         Need to perform if else depending on the ordering of the array.
-        Commeneted part gives a sort of cleaner solution, but still getting negative
+        Commented part gives a sort of cleaner solution, but still getting negative
         values.
         """
 
