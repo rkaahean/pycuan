@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def get_bass_model(p, q, M, period=30):
     """
     Create a discrete bass model, given p, q & M.
@@ -93,14 +94,13 @@ def extrapolate_bass(p, q, M, till_period, **kwargs):
     return N, A
 
 
-def discrete_bass_func(A_t, p, q):
+def discrete_bass_func(A_t, p, q, M):
     """
     A function that returns the N(t), given A(t), p and q based on the
     Discrete Bass Model. Mainly used for the non linear optimization.
     """
 
     # M fixed in problem, but in general, it could be another variable to optimize too.
-    M = 100
     return M * p + (q - p) * A_t + (-q / M) * (A_t ** 2)
 
 
