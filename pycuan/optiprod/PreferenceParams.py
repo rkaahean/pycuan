@@ -1,29 +1,30 @@
 import numpy as np
 
 
-class PreferenceParams():
+class PreferenceParams:
     """
-    A class to preprocess the Preference Parameters.
+    A class to pre-process the Preference Parameters.
     This class will:
     1. Generate functions which can compute the preference values for interpolated
-    product valus.
+    product values.
     2. Produce the product value itself.
     """
 
     def __init__(self, df, constants, interpolation_constant=1):
         """
-        All preprocessing, cleaning should be done in this class.
-        We are passing in dataframe for speed purposes, but all computation will be done in NumPy.
+        All pre-processing, cleaning should be done in this class.
+        We are passing in data-frame for speed purposes, but all computation will be done in NumPy.
         """
-        self._data = df
+
         self._constants = constants
         self._INTERPOLATION = interpolation_constant
 
-        self._data = self.get_process_dataframe()
-        self.set_name_index_map()
+        self._data = self.set_processed_data(df)
+        self._NAME_INDEX_MAP = self.set_name_index_map()
 
         self._data = self._data.values
 
+        # TODO: Add a describe function of some sort that gives information about the computation.
         self._INTERPOLATED_PRODUCT_RANGES = self.perform_interpolate_product_range()
         self._INTERPOLATED_COST_RANGE = self.perform_interpolate_cost_range()
 
@@ -96,11 +97,20 @@ class PreferenceParams():
         """
         return self._data
 
-    def get_process_dataframe(self):
+    def get_processed_data(self):
+        """
+        Getter function.
+        :return: numpy array of preference data.
+        """
+
+        return self._data
+
+    def set_processed_data(self, df):
         """
         Clean the data of any issues.
+        Return NumPy array for faster computation.
         """
-        df = self._data
+
         df.columns = df.columns.str.strip()
 
         necessary_columns = sum(self._constants.get_feature_matrix().values(), [])
@@ -136,5 +146,5 @@ class PreferenceParams():
         """
         Mapping from name to index
         """
-        columns = self.get_process_dataframe().columns
-        self._NAME_INDEX_MAP = {columns[i]: i for i in range(len(columns))}
+        columns = self.get_processed_data().columns
+        return {columns[i]: i for i in range(len(columns))}
