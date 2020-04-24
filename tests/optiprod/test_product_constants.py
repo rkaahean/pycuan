@@ -1,4 +1,5 @@
 from pycuan.optiprod.ProductConstants import *
+import numpy as np
 
 """
 There are 4 major inputs that define the ProductConstants class:
