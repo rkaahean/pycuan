@@ -1,6 +1,7 @@
 import numpy as np
 
-class ProductConstants():
+
+class ProductConstants:
     """
     A class defining all the constants. Semi generic.
 
