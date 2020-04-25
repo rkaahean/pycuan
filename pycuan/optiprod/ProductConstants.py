@@ -80,10 +80,3 @@ class ProductConstants:
         else:
             logger.log(logging.DEBUG, "Set importance length.")
             return len(importance)
-
-    def get_length_importance(self):
-        """
-        Simple getter function.
-        :return: Importance length
-        """
-        return self._IMPORTANCE_LEN
