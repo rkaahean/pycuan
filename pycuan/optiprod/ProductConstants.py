@@ -5,7 +5,7 @@ logger.setLevel(logging.DEBUG)
 
 formatter = logging.Formatter('%(asctime)s:%(name)s:%(message)s')
 
-handler = logging.FileHandler('data/logs/PreferenceParams.log')
+handler = logging.FileHandler('data/logs/ProductConstants.log')
 handler.setFormatter(formatter)
 
 logger.addHandler(handler)
@@ -46,7 +46,7 @@ class ProductConstants:
         """
         return self._FEATURE_MATRIX
 
-    def get_range_product(self):
+    def get_product_range(self):
         """
         Return the range of products.
         """
@@ -63,7 +63,6 @@ class ProductConstants:
         Return the competition catalog.
         NEEDS TO BE CALLED MANUALLY for now.
         """
-
         return self._COMPETITION
 
     def set_length_importance(self):
@@ -81,3 +80,10 @@ class ProductConstants:
         else:
             logger.log(logging.DEBUG, "Set importance length.")
             return len(importance)
+
+    def get_length_importance(self):
+        """
+        Simple getter function.
+        :return: Importance length
+        """
+        return self._IMPORTANCE_LEN
