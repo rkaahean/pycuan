@@ -1,4 +1,15 @@
 import numpy as np
+import logging
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+
+formatter = logging.Formatter('%(asctime)s:%(name)s:%(message)s')
+
+handler = logging.FileHandler('data/logs/PreferenceParams.log')
+handler.setFormatter(formatter)
+
+logger.addHandler(handler)
 
 
 class PreferenceParams:
@@ -15,7 +26,8 @@ class PreferenceParams:
         All pre-processing, cleaning should be done in this class.
         We are passing in data-frame for speed purposes, but all computation will be done in NumPy.
         """
-
+        logger.log(logging.DEBUG, "\n")
+        logger.log(logging.DEBUG, "Initializing the Class...")
         self._constants = constants
         self._INTERPOLATION = interpolation_constant
 
@@ -25,20 +37,20 @@ class PreferenceParams:
         self._data = self._data.values
 
         # TODO: Add a describe function of some sort that gives information about the computation.
-        self._INTERPOLATED_PRODUCT_RANGES = self.perform_interpolate_product_range()
-        self._INTERPOLATED_COST_RANGE = self.perform_interpolate_cost_range()
+        self._INTERPOLATED_PRODUCT_RANGES = self.compute_interpolated_product_range()
+        self._INTERPOLATED_COST_RANGE = self.compute_interpolated_cost_range()
 
-        self._INTERPOLATED_PRODUCT_CATALOG = self.perform_interpolate_product_catalog()
-        self._INTERPOLATED_COST_CATALOG = self.perform_interpolate_cost_catalog()
+        self._INTERPOLATED_PRODUCT_CATALOG = self.compute_interpolated_product_catalog()
+        self._INTERPOLATED_COST_CATALOG = self.compute_interpolated_cost_catalog()
 
-    def perform_interpolate_product_range(self):
+    def compute_interpolated_product_range(self):
         """
         Get all possible attribute values for all possible features.
         """
 
-        return np.array(list(map(self.generate_range, self._constants.get_range_product())))
+        return np.array(list(map(self.generate_range, self._constants.get_product_range())))
 
-    def perform_interpolate_cost_range(self):
+    def compute_interpolated_cost_range(self):
         """
         Get all possible cost values.
         """
@@ -54,22 +66,43 @@ class PreferenceParams:
     def generate_range(self, x):
         """
         Given the range, we will return all possible candidates for a given attribute.
+
+        if interpolation_rate == x, then the range of products will have 2*n + 1 elements.
+
+        TODO : AS of now, we cannot handle cases where RANGE is more than 3 different values.
+                It has to be exactly 3.
         """
-        d = 0.5 * self.get_interpolation_rate() + 1
-        z = np.stack(np.linspace([x[0], x[1]], [x[1], x[2]],
-                                 num=int(d + 3 / 2)), axis=1)
+        logger.log(logging.DEBUG, 'Performing interpolation.')
+
+        interpolation_rate = self.get_interpolation_rate()
+        d = interpolation_rate + 1
+
+        """
+        Generate intermediate values between ranges. Then combine the two.
+        The middle value will be repeated, and they need to be removed.
+        """
+
+        z = np.stack(np.linspace([x[0], x[1]], [x[1], x[2]], num=d), axis=1)
         z = np.concatenate(z)
         _, idx = np.unique(z, return_index=True)
+        logger.log(logging.DEBUG, 'Completed interpolated. Length = {}'.format(len(idx)))
+
         return z[np.sort(idx)].tolist()
 
-    def perform_interpolate_product_catalog(self):
+    def compute_interpolated_product_catalog(self):
         """
-        Given that we know the range of products, we want to compute all possible produdcts.
+        Given that we know the range of products, we want to compute all possible products.
+        We do importance_length - 1, because Brand cannot be interpolated, so it is being omitted.
         """
         x0, x1, x2, x3, x4 = tuple(self.get_interpolation_product_range())
-        return np.stack(np.meshgrid(x0, x1, x2, x3, x4), -1).reshape(-1, 5)
+        return np.stack(np.meshgrid(x0, x1, x2, x3, x4), -1).reshape(-1, self._constants.get_length_importance() - 1)
 
-    def perform_interpolate_cost_catalog(self):
+    def compute_interpolated_cost_catalog(self):
+        """
+        Computing the interpolated cost values for the corresponding interpolated products.
+
+        :return: A matrix of of different possible costs.
+        """
         x0, x1, x2, x3, x4 = tuple(self.get_interpolation_cost_range())
         return np.stack(np.meshgrid(x0, x1, x2, x3, x4), -1).reshape(-1, 5)
 
@@ -110,11 +143,14 @@ class PreferenceParams:
         Clean the data of any issues.
         Return NumPy array for faster computation.
         """
+        logger.log(logging.DEBUG, "Processing data-frame...")
 
         df.columns = df.columns.str.strip()
 
         necessary_columns = sum(self._constants.get_feature_matrix().values(), [])
         df = df.loc[:, necessary_columns]
+
+        logger.log(logging.DEBUG, "Finished processing data-frame")
 
         return df
 
