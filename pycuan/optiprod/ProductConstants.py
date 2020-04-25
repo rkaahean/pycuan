@@ -1,3 +1,16 @@
+import logging
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+
+formatter = logging.Formatter('%(asctime)s:%(name)s:%(message)s')
+
+handler = logging.FileHandler('data/logs/PreferenceParams.log')
+handler.setFormatter(formatter)
+
+logger.addHandler(handler)
+
+
 class ProductConstants:
     """
     A class defining all the constants. Semi generic.
@@ -7,13 +20,19 @@ class ProductConstants:
         """
         Constants related to product that will never change over time, unless intended to.
         """
+        logger.log(logging.INFO, '\n')
+        logger.log(logging.DEBUG, "Starting initialization...")
+
         self._FEATURE_MATRIX = feature_matrix
         self._PRODUCT_RANGE = product_ranges
         self._COST_MATRIX = cost_matrix
         self._IMPORTANCE_LEN = self.set_length_importance()
 
         if competition:
+            logger.log(logging.DEBUG, "Assigned competition.")
             self._COMPETITION = competition
+
+        logger.log(logging.DEBUG, "Completed Initialization.")
 
     def get_length_importance(self):
         """
@@ -54,8 +73,11 @@ class ProductConstants:
         Error handling here if Im feature does not exist.
         """
         try:
+            logger.log(logging.DEBUG, "Attempting to set importance length...")
             importance = self.get_feature_matrix()['Im']
-        except KeyError as e:
-            print("The importance key should be 'Im' in the feature matrix.")
+        except KeyError:
+            logger.exception("The importance variable in the feature matrix dictionary should have the key 'Im' ")
+            # print("The importance key should be 'Im' in the feature matrix.")
         else:
+            logger.log(logging.DEBUG, "Set importance length.")
             return len(importance)
