@@ -1,4 +1,5 @@
 import logging
+import numpy as np
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -16,7 +17,7 @@ class ProductConstants:
     A class defining all the constants. Semi generic.
     """
 
-    def __init__(self, feature_matrix, product_ranges, cost_matrix, competition=False):
+    def __init__(self, feature_matrix, product_ranges, cost_matrix, competition=np.array([])):
         """
         Constants related to product that will never change over time, unless intended to.
         """
@@ -28,7 +29,7 @@ class ProductConstants:
         self._COST_MATRIX = cost_matrix
         self._IMPORTANCE_LEN = self.set_length_importance()
 
-        if competition:
+        if competition.shape[0] != 0:
             logger.log(logging.DEBUG, "Assigned competition.")
             self._COMPETITION = competition
 
