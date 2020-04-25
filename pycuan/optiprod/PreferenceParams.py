@@ -47,14 +47,14 @@ class PreferenceParams:
         """
         Get all possible attribute values for all possible features.
         """
-
+        logger.log(logging.DEBUG, "Starting interpolation process for products...")
         return np.array(list(map(self.generate_range, self._constants.get_product_range())))
 
     def compute_interpolated_cost_range(self):
         """
         Get all possible cost values.
         """
-
+        logger.log(logging.DEBUG, "Starting interpolation process for costs...")
         return np.array(list(map(self.generate_range, self._constants.get_cost_matrix())))
 
     def get_interpolation_cost_range(self):
@@ -93,9 +93,12 @@ class PreferenceParams:
         """
         Given that we know the range of products, we want to compute all possible products.
         We do importance_length - 1, because Brand cannot be interpolated, so it is being omitted.
+
+        :return: A matrix of of different possible products.
         """
-        x0, x1, x2, x3, x4 = tuple(self.get_interpolation_product_range())
-        return np.stack(np.meshgrid(x0, x1, x2, x3, x4), -1).reshape(-1, self._constants.get_length_importance() - 1)
+        logger.log(logging.DEBUG, "Creating the catalog of products...")
+        product_ranges = self.get_interpolation_product_range()
+        return np.stack(np.meshgrid(*product_ranges), -1).reshape(-1, self._constants.get_length_importance() - 1)
 
     def compute_interpolated_cost_catalog(self):
         """
@@ -103,8 +106,9 @@ class PreferenceParams:
 
         :return: A matrix of of different possible costs.
         """
-        x0, x1, x2, x3, x4 = tuple(self.get_interpolation_cost_range())
-        return np.stack(np.meshgrid(x0, x1, x2, x3, x4), -1).reshape(-1, 5)
+        logger.log(logging.DEBUG, "Creating the catalog of costs...")
+        cost_ranges = self.get_interpolation_cost_range()
+        return np.stack(np.meshgrid(*cost_ranges), -1).reshape(-1, self._constants.get_length_importance() - 1)
 
     def get_interpolation_product_catalog(self):
         """
@@ -151,7 +155,6 @@ class PreferenceParams:
         df = df.loc[:, necessary_columns]
 
         logger.log(logging.DEBUG, "Finished processing data-frame")
-
         return df
 
     def get_importance_values(self):
