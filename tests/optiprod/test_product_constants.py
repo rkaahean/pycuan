@@ -10,6 +10,7 @@ There are 4 major inputs that define the ProductConstants class:
 4. The product specification of the competitors. (However, this is not a necessary step)
 """
 
+
 """
 1. The matrix listing which features and the corresponding columns in the preference parameters data.
 THE ORDER OF attributes is IMPORTANT.
@@ -69,4 +70,3 @@ COST_RANGES = np.array([COST_PRICE,
 Test run.
 """
 obj = ProductConstants(FEATURE_MATRIX, PRODUCT_RANGES, COST_RANGES)
-print("Created object successfully.")
