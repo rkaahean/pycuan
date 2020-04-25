@@ -26,8 +26,10 @@ class UtilityCompute:
         """
         Get Ranges of products, and mapping between index of product attr. and the index of the
         corresponding preference params.
+
+        TODO: Need to extend for more than 3 ranges.
         """
-        PRODUCT_RANGES = self.get_preference_params().get_product_constant().get_range_product()
+        PRODUCT_RANGES = self.get_preference_params().get_product_constant().get_product_range()
 
         N, ATTR_LEN = PRODUCT_RANGES.shape
         PREF_MAP = {i: np.array([ATTR_LEN * i, ATTR_LEN * i + 1, ATTR_LEN * i + 2]) for i in range(N)}
