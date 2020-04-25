@@ -37,6 +37,8 @@ found in the preference parameters data.
 
 It is ALSO important to pass price as the first array, because price is the first element in the feature matrix.
 The orders from feature matrix and product ranges SHOULD be the same.
+
+As of now, you can only process (exactly) 3 different values of RANGE. For ex, [30, 10, 7, 5] would not work.
 """
 RANGE_PRICE = np.array([30, 10, 5])
 RANGE_TIME_INSULATION = np.array([0.5, 1, 3])
@@ -82,9 +84,7 @@ df = pd.read_excel('data/mugs-preference-parameters-full.xlsx')
 # Everything else should be dropped.
 df = df.iloc[:, 1:]
 
-preference_params = PreferenceParams(df, product_constants)
-
-print("Setup completed.")
+preference_params = PreferenceParams(df, product_constants, interpolation_constant=1)
 
 print("Product Range", preference_params.get_interpolation_product_range())
 print("Product Catalog", preference_params.get_interpolation_product_catalog())
