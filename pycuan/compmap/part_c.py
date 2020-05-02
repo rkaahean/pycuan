@@ -30,13 +30,13 @@ print("Reverting to k = 2.\n")
 fa = FactorAnalyzer(n_factors=2, rotation=None)
 fa_fit_out = fa.fit(cars_ar)
 fa_communalities = fa_fit_out.get_communalities()
-fa_scores = fa_fit_out.transform(cars_ar)
+fa_scores = np.array(fa_fit_out.transform(cars_ar))
 fa_factor_loadings = np.array(fa_fit_out.loadings_)
 
 plt.figure()
-plt.scatter(fa_factor_loadings[:, 0], fa_factor_loadings[:, 1])
+plt.scatter(fa_scores[:, 0], fa_scores[:, 1])
 
-SCALE = 1
+SCALE = 1.5
 for i in range(len(fa_communalities)):
     x = fa_factor_loadings[i, 0]
     y = fa_factor_loadings[i, 1]
@@ -50,10 +50,11 @@ for i in range(len(fa_communalities)):
               head_width=0.08, head_length=0.0002)
 
 # Again, need to add spacing to annotations. Need to resolve issue in Part A and Part B.
-car_atr = list(cars_ar.columns)
+
+car_atr = list(cars_ar.index)
 for i in range(len(car_atr)):
-    plt.annotate(car_atr[i], fa_factor_loadings[i, :])
-plt.tight_layout()
-plt.axis('square')
+    plt.annotate(car_atr[i], fa_scores[i, :])
+plt.axis('scaled')
+plt.xlim(-2, 2)
 plt.show()
 
