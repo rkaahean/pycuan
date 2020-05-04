@@ -15,6 +15,7 @@ for k in range(1, 5):
 plt.plot(list(range(1, 5)), stress)
 plt.xlabel("Values of k.")
 plt.ylabel("Stress.")
+plt.title(" k = 3 is the optimal number of components.")
 plt.gcf().savefig('data/q2kchoose.png', dpi=500)
 # plt.show()
 

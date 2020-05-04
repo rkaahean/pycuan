@@ -15,8 +15,8 @@ for k in range(1, 9):
 plt.plot(list(range(1, 9)), stress)
 plt.xlabel("Values of k.")
 plt.ylabel("Stress.")
+plt.title(" k = 2 is the optimal number of components.")
 plt.gcf().savefig('data/q1kchoose.png', dpi=500)
-# plt.show()
 
 print("Clearly, beyond k = 2, the values change barely, if at all. PART 1 Completed.\n")
 
