@@ -37,6 +37,7 @@ plt.figure()
 plt.scatter(fa_scores[:, 0], fa_scores[:, 1])
 
 SCALE = 1.5
+car_attrs = list(cars_ar.columns)
 for i in range(len(fa_communalities)):
     x = fa_factor_loadings[i, 0]
     y = fa_factor_loadings[i, 1]
@@ -48,13 +49,16 @@ for i in range(len(fa_communalities)):
 
     plt.arrow(0, 0, arrow_end_x, arrow_end_y, length_includes_head=True,
               head_width=0.08, head_length=0.0002)
+    plt.annotate(car_attrs[i], (arrow_end_x, arrow_end_y))
 
 # Again, need to add spacing to annotations. Need to resolve issue in Part A and Part B.
 
 car_atr = list(cars_ar.index)
 for i in range(len(car_atr)):
     plt.annotate(car_atr[i], fa_scores[i, :])
+
 plt.axis('scaled')
 plt.xlim(-2, 2)
+plt.gcf().savefig('data/q3plot.png', dpi=500)
 plt.show()
 
