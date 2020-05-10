@@ -1,6 +1,4 @@
 import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
 import json
 
@@ -21,12 +19,6 @@ for drug in drugs:
     y_middle_three = y[1:4]
     x_middle_three = x[1:4]
 
-    """
-    def compute_response(sf, c, d):
-        return 0.3 + (1.6 - 0.3) * (sf ** c) / (d + sf ** c)
-    """
-
-    # popt, _ = curve_fit(compute_response, x_middle_three, y_middle_three, p0=[1, 1])
     popt, _ = curve_fit(lambda sf, c, d: y_lowest + (y_highest - y_lowest) * (sf ** c) / (d + sf ** c),
                         x_middle_three, y_middle_three, p0=[1, 1])
 
@@ -39,7 +31,7 @@ data = {
     'adbudg_min': [],
     'adbudg_max': [],
     'c': [],
-    'd': []
+    'd': [],
 }
 
 for drug in drugs:
