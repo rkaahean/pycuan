@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 from pycuan.workforce.utils import compute_ratio_revenue
 import scipy.optimize as optimize
+import json
 
 computed_values = pd.read_json('data/computed_values.json')
 margin = pd.read_excel('data/margin-revenue-salesforce.xlsx', index_col=0)
@@ -50,6 +51,16 @@ optimizer_output = optimize.minimize(negative_profit, x0, method='SLSQP', bounds
 
 drug_share = optimizer_output['x']
 i = 0
+
+data = {
+    'Drug': [],
+    'Optimal Salesforce': [],
+    'Optimal Profit': [],
+    'Salesforce Change': [],
+    'Profit Change': []
+}
+
+
 for drug in drugs:
     drug_workforce_optimal, drug_profit_optimal = partb_values[partb_values['Drug'] == drug].iloc[:, 1:] \
         .values[0] \
@@ -70,4 +81,13 @@ for drug in drugs:
         (drug_workforce_optimal - overall_optimal_drug_workforce) / drug_workforce_optimal * 100,
         (drug_profit_optimal - profit) / drug_profit_optimal * 100))
 
+    data['Drug'] += [drug]
+    data['Optimal Salesforce'] += [overall_optimal_drug_workforce]
+    data['Optimal Profit'] += [profit]
+    data['Salesforce Change'] += [(drug_workforce_optimal - overall_optimal_drug_workforce) / drug_workforce_optimal * 100]
+    data['Profit Change'] += [(drug_profit_optimal - profit) / drug_profit_optimal * 100]
+
     i += 1
+
+with open('data/partc_values.json', 'w') as fp:
+    json.dump(data, fp)
