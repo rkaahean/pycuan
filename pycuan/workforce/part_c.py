@@ -60,7 +60,6 @@ data = {
     'Profit Change': []
 }
 
-
 for drug in drugs:
     drug_workforce_optimal, drug_profit_optimal = partb_values[partb_values['Drug'] == drug].iloc[:, 1:] \
         .values[0] \
@@ -84,7 +83,8 @@ for drug in drugs:
     data['Drug'] += [drug]
     data['Optimal Salesforce'] += [overall_optimal_drug_workforce]
     data['Optimal Profit'] += [profit]
-    data['Salesforce Change'] += [(drug_workforce_optimal - overall_optimal_drug_workforce) / drug_workforce_optimal * 100]
+    data['Salesforce Change'] += [
+        (drug_workforce_optimal - overall_optimal_drug_workforce) / drug_workforce_optimal * 100]
     data['Profit Change'] += [(drug_profit_optimal - profit) / drug_profit_optimal * 100]
 
     i += 1

@@ -2,7 +2,6 @@ import pandas as pd
 from scipy.optimize import curve_fit
 import json
 
-proxy_for_infinity = 10
 
 workforce_estimates = pd.read_excel('data/delphi-consensus-outputs.xlsx', index_col=0)
 drugs = workforce_estimates.columns

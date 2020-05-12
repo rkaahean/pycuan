@@ -9,7 +9,7 @@ margin.columns = margin.columns.str.strip()
 
 drugs = computed_values['Drug'].values
 
-WORKFORCE_RANGE = np.linspace(0, 800, 100)
+WORKFORCE_RANGE = np.linspace(0, 800, 2000)
 WORKFORCE_COST = 0.057
 
 drug_profit_range = []
