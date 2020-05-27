@@ -1,0 +1,8 @@
+# Created by .ignore support plugin (hsz.mobi)
+.idea/
+pycuan/__pycache__/
+pycuan/adopt/__pycache__/
+pycuan/optiprod/__pycache__/
+tests/__pycache__/
+tests/optiprod/__pycache__/
+compmap/data/
